@@ -1,8 +1,9 @@
 import pytest
 from gendiff.scripts.generate_diff import generate_diff
-from gendiff.scripts.plain import plain
-from gendiff.scripts.stylish import stylish
+from gendiff.formatters.plain import plain
+from gendiff.formatters.stylish import stylish
 from gendiff.scripts.parser import parse
+from gendiff.formatters.json_formatter import json_formatter
 
 @pytest.mark.parametrize("file1, file2, formatter, expected", [
     ("tests/fixtures/file3.json", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
@@ -12,6 +13,8 @@ from gendiff.scripts.parser import parse
     ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", plain, "tests/fixtures/expected_result_plain.txt"),
     ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", stylish, "tests/fixtures/expected_result_stylish.txt"),
     ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", json_formatter, "tests/fixtures/expected_result_simple.json"),
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", json_formatter, "tests/fixtures/expected_result.json"),
 ])
 
 def test_generate_diff(file1, file2, formatter, expected):

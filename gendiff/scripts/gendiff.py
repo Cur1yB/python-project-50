@@ -1,7 +1,8 @@
 import argparse
 from gendiff.scripts.generate_diff import generate_diff
-from gendiff.scripts.stylish import stylish
-from gendiff.scripts.plain import plain
+from gendiff.formatters.stylish import stylish
+from gendiff.formatters.plain import plain
+from gendiff.formatters.json_formatter import json_formatter
 from gendiff.scripts.parser import parse
 
 
@@ -12,12 +13,14 @@ def main():
     parser.add_argument('first_file', help='first config file')
     parser.add_argument('second_file', help='second config file')
     parser.add_argument('-f', '--format', help='set format of output',
-                        default='stylish', choices=['stylish', 'plain'])
+                        default='stylish', choices=['stylish', 'plain', 'json'])
     args = parser.parse_args()
     data1 = parse(args.first_file)
     data2 = parse(args.second_file)
     if args.format == 'stylish':
         formatter = stylish
+    elif args.format == 'json':
+        formatter = json_formatter
     else:
         formatter = plain
     diff = generate_diff(data1, data2, formatter)
