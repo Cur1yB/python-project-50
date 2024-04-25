@@ -18,9 +18,7 @@ from gendiff.formatters.json_formatter import json_formatter
 ])
 
 def test_generate_diff(file1, file2, formatter, expected):
-    file1_data = parse(file1)
-    file2_data = parse(file2)
-    diff = generate_diff(file1_data, file2_data, formatter)
+    diff = generate_diff(file1, file2, formatter)
     expected_result = read_file(expected)
     print("Formatted Diff:\n", diff)
     write_file(diff, "tests/output/actual_result.txt")
