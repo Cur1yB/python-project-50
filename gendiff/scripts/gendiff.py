@@ -1,5 +1,5 @@
 import argparse
-from gendiff.scripts.generate_diff import find_diff
+from gendiff.scripts.find_diff import find_diff
 from gendiff.formatters.stylish import stylish
 from gendiff.formatters.plain import plain
 from gendiff.formatters.json_formatter import json_formatter

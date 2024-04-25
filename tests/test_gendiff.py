@@ -4,6 +4,7 @@ from gendiff.formatters.plain import plain
 from gendiff.formatters.stylish import stylish
 from gendiff.scripts.parser import parse
 from gendiff.formatters.json_formatter import json_formatter
+from gendiff import generate_diff
 
 @pytest.mark.parametrize("file1, file2, formatter, expected", [
     ("tests/fixtures/file3.json", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
