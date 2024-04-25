@@ -6,7 +6,7 @@ from gendiff.formatters.json_formatter import json_formatter
 from gendiff.scripts.parser import parse
 
 
-def generate_diff(data1, data2, formatter):
+def generate_diff(data1, data2, formatter=stylish):
     diff = find_diff(data1, data2)
     diff = formatter(diff)
     return diff
