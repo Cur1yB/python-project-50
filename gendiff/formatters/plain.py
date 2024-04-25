@@ -6,18 +6,31 @@ def plain(diff):
 
 def plain_formatter(diff, path=""):
     lines = []
+
+    def add_line(status, value, full_key):
+        actions = {
+            "nested": lambda value, full_key: lines.extend(
+                plain_formatter(value, full_key)
+            ),
+            "added": lambda value, full_key: lines.append(
+                format_added_property(value, full_key)
+            ),
+            "removed": lambda value, full_key: lines.append(
+                f"Property '{full_key}' was removed"
+            ),
+            "changed": lambda value, full_key: lines.append(
+                format_changed_property(value, full_key)
+            ),
+            "unchanged": lambda value, full_key: None
+        }
+        action = actions.get(status)
+        if action:
+            action(value, full_key)
+
     for key, (status, value) in diff.items():
         full_key = create_full_key(path, key)
-        if status == "nested":
-            lines.extend(plain_formatter(value, full_key))
-        elif status == "added":
-            lines.append(format_added_property(value, full_key))
-        elif status == "removed":
-            lines.append(f"Property '{full_key}' was removed")
-        elif status == "changed":
-            lines.append(format_changed_property(value, full_key))
-        elif status == "unchanged":
-            continue
+        add_line(status, value, full_key)
+
     return lines
 
 

@@ -1,22 +1,27 @@
 import pytest
 from gendiff import generate_diff
-from gendiff.formatters.plain import plain
-from gendiff.formatters.stylish import stylish
-from gendiff.scripts.parser import parse
-from gendiff.formatters.json_formatter import json_formatter
+
 
 @pytest.mark.parametrize("file1, file2, formatter, expected", [
-    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
-    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", stylish, "tests/fixtures/expected_result_simple.txt"),
-    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", stylish, "tests/fixtures/expected_result_stylish.txt"), 
-    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", stylish, "tests/fixtures/expected_result_stylish.txt"),
-    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", plain, "tests/fixtures/expected_result_plain.txt"),
-    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", stylish, "tests/fixtures/expected_result_stylish.txt"),
-    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
-    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", json_formatter, "tests/fixtures/expected_result_simple.json"),
-    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", json_formatter, "tests/fixtures/expected_result.json"),
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", 'plain',
+     "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", 'stylish',
+     "tests/fixtures/expected_result_simple.txt"),
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", 'stylish',
+     "tests/fixtures/expected_result_stylish.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", 'stylish',
+     "tests/fixtures/expected_result_stylish.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", 'plain',
+     "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", 'stylish',
+     "tests/fixtures/expected_result_stylish.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", 'plain',
+     "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", 'json',
+     "tests/fixtures/expected_result_simple.json"),
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", 'json',
+     "tests/fixtures/expected_result.json"),
 ])
-
 def test_generate_diff(file1, file2, formatter, expected):
     diff = generate_diff(file1, file2, formatter)
     expected_result = read_file(expected)
@@ -26,9 +31,11 @@ def test_generate_diff(file1, file2, formatter, expected):
     write_file(expected_result, "tests/output/expected_result_in_tests.txt")
     assert diff == expected_result
 
+
 def read_file(file_name):
     with open(file_name, 'r') as file:
         return file.read().strip()
+
 
 def write_file(content, file_name):
     with open(file_name, 'w') as file:
