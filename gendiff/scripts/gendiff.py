@@ -6,10 +6,19 @@ from gendiff.formatters.json_formatter import json_formatter
 from gendiff.scripts.parser import parse
 
 
-def generate_diff(file_path1, file_path2, formatter=stylish):
+FORMATTERS = {
+    'stylish': stylish,
+    'plain': plain,
+    'json': json_formatter
+}
+
+
+def generate_diff(file_path1, file_path2, formatter='stylish'):
     data1 = parse(file_path1)
     data2 = parse(file_path2)
     diff = find_diff(data1, data2)
+    if isinstance(formatter, str):
+        formatter = FORMATTERS[formatter]
     diff = formatter(diff)
     return diff
 
@@ -24,13 +33,8 @@ def main():
                         default='stylish', choices=['stylish', 'plain', 'json'])
     args = parser.parse_args()
     file_path1 = args.first_file
-    file_path2 = parse(args.second_file)
-    if args.format == 'stylish':
-        formatter = stylish
-    elif args.format == 'json':
-        formatter = json_formatter
-    else:
-        formatter = plain
+    file_path2 = args.second_file
+    formatter = args.format
     diff = generate_diff(file_path1, file_path2, formatter)
     print(diff)
 
