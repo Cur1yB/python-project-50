@@ -1,5 +1,5 @@
 import pytest
-from gendiff.scripts.generate_diff import generate_diff
+from gendiff.scripts.gendiff import generate_diff
 from gendiff.formatters.plain import plain
 from gendiff.formatters.stylish import stylish
 from gendiff.scripts.parser import parse

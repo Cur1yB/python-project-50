@@ -1,9 +1,15 @@
 import argparse
-from gendiff.scripts.generate_diff import generate_diff
+from gendiff.scripts.generate_diff import find_diff
 from gendiff.formatters.stylish import stylish
 from gendiff.formatters.plain import plain
 from gendiff.formatters.json_formatter import json_formatter
 from gendiff.scripts.parser import parse
+
+
+def generate_diff(data1, data2, formatter):
+    diff = find_diff(data1, data2)
+    diff = formatter(diff)
+    return diff
 
 
 def main():

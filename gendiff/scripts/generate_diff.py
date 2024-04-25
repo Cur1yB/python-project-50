@@ -1,9 +1,3 @@
-def generate_diff(data1, data2, formatter):
-    diff = find_diff(data1, data2)
-    diff = formatter(diff)
-    return diff
-
-
 def find_diff(data1, data2):
     keys = sorted(set(data1.keys()).union(data2.keys()))
     diff = {}
