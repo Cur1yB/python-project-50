@@ -1,26 +1,29 @@
 import pytest
-from gendiff.scripts.generate_diff import generate_diff, format_diff
-from gendiff.scripts.parser import read_data
+from gendiff.scripts.generate_diff import generate_diff
+from gendiff.scripts.plain import plain
+from gendiff.scripts.stylish import stylish
+from gendiff.scripts.parser import parse
 
-@pytest.mark.parametrize("file1, file2, expected", [
-    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", "tests/fixtures/expected_result.txt"),
-    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", "tests/fixtures/expected_result_simple.txt"),
-    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", "tests/fixtures/expected_result.txt")
+@pytest.mark.parametrize("file1, file2, formatter, expected", [
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.json", "tests/fixtures/file2.json", stylish, "tests/fixtures/expected_result_simple.txt"),
+    ("tests/fixtures/file3.json", "tests/fixtures/file4.json", stylish, "tests/fixtures/expected_result_stylish.txt"), 
+    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", stylish, "tests/fixtures/expected_result_stylish.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file2.yml", plain, "tests/fixtures/expected_result_plain.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", stylish, "tests/fixtures/expected_result_stylish.txt"),
+    ("tests/fixtures/file1.yml", "tests/fixtures/file4.json", plain, "tests/fixtures/expected_result_plain.txt"),
 ])
 
-def test_generate_diff(file1, file2, expected):
-    file1_data = read_data(file1)
-    file2_data = read_data(file2)
-    diff = generate_diff(file1_data, file2_data)
-    
-    formatted_diff = '{\n' + format_diff(diff) + '\n}'
-    #formatted_diff = format_diff(diff)
+def test_generate_diff(file1, file2, formatter, expected):
+    file1_data = parse(file1)
+    file2_data = parse(file2)
+    diff = generate_diff(file1_data, file2_data, formatter)
     expected_result = read_file(expected)
-    print("Formatted Diff:\n", formatted_diff)
-    write_file(formatted_diff, "tests/output/actual_result.txt")
+    print("Formatted Diff:\n", diff)
+    write_file(diff, "tests/output/actual_result.txt")
     print("Expected Result:\n", expected_result)
     write_file(expected_result, "tests/output/expected_result_in_tests.txt")
-    assert formatted_diff == expected_result
+    assert diff == expected_result
 
 def read_file(file_name):
     with open(file_name, 'r') as file:
