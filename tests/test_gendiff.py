@@ -25,18 +25,9 @@ from gendiff import generate_diff
 def test_generate_diff(file1, file2, formatter, expected):
     diff = generate_diff(file1, file2, formatter)
     expected_result = read_file(expected)
-    print("Formatted Diff:\n", diff)
-    write_file(diff, "tests/output/actual_result.txt")
-    print("Expected Result:\n", expected_result)
-    write_file(expected_result, "tests/output/expected_result_in_tests.txt")
     assert diff == expected_result
 
 
 def read_file(file_name):
     with open(file_name, 'r') as file:
         return file.read().strip()
-
-
-def write_file(content, file_name):
-    with open(file_name, 'w') as file:
-        file.write(content)
